@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <title>pra ti </title>
+    <style>
+      /* Base reset */
+      body {
+        margin: 0;
+        font-family: "Arial", sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background: linear-gradient(135deg, #a8e6cf, #3d8168);
+        background-size: cover;
+        color: #1b4332;
+      }
+
+      .container {
+        text-align: center;
+        background: #f0f7f4;
+        padding: 2rem;
+        border-radius: 16px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 80%;
+        max-width: 400px;
+      }
+
+      /* Estilos e Animações dos Objetos de Decoração REMOVIDOS */
+
+      h1 {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+      }
+
+      /* Estilos do Input e Botão */
+      input[type="text"] {
+        padding: 0.5rem;
+        font-size: 16px;
+        border: 2px solid #3d8168;
+        border-radius: 8px;
+        outline: none;
+        transition: border-color 0.3s ease;
+        -webkit-appearance: none;
+        appearance: none;
+      }
+      input[type="text"]:focus {
+        border-color: #1b4332;
+      }
+      button {
+        margin-top: 1rem;
+        padding: 0.7rem 1.5rem;
+        font-size: 1rem;
+        color: #f0f7f4;
+        background-color: #3d8168;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+      button:hover {
+        background-color: #1b4332;
+      }
+      .error {
+        color: #e63946;
+        margin-top: 0.5rem;
+        font-size: 0.9rem;
+      }
+
+      /* Estilos Personalizados do SweetAlert2 */
+      .swal2-container {
+        background: linear-gradient(135deg, #a8e6cf, #3d8168) !important;
+      }
+      .swal2-popup {
+        background: #f0f7f4 !important;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border-radius: 12px;
+      }
+      .swal2-backdrop {
+        background-color: rgba(0, 0, 0, 0.4) !important;
+      }
+      .swal2-image {
+        border-radius: 15px;
+        border: 3px solid #3d8168;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Quem é você?</h1>
+      <input id="nameInput" type="text" placeholder="Name" />
+      <button id="enterButton">Enter</button>
+      <p class="error" id="errorMessage" style="display: none">
+        Desculpe, não sei quem você é.
+      </p>
+    </div>
+
+    <script>
+      // Função Principal: Inicia o convite
+      function startValentinesInvite() {
+        Swal.fire({
+          title: "EBA, É você! 💖",
+          text: "Gostaria de sair comigo? :>",
+          // GIF ÚNICO (7bc7db33a68241174b95762c994b364c (1).gif) AQUI
+          imageUrl: "7bc7db33a68241174b95762c994b364c (1).gif",
+          imageWidth: 200,
+          imageHeight: 200,
+          imageAlt: "Date Invite",
+          showDenyButton: true,
+          showCancelButton: true,
+          confirmButtonText: "Sim! 💘",
+          denyButtonText: "Não, obrigada 😢",
+          cancelButtonText: "Talvez? 🤔",
+          background: "#f0f7f4",
+          color: "#1b4332",
+          confirmButtonColor: "#3d8168",
+          denyButtonColor: "#e63946",
+          cancelButtonColor: "#a8e6cf",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            askPreferences();
+          } else if (result.isDenied) {
+            Swal.fire("Eita! 😢", "Triste, porém tenha um bom dia", "info");
+          } else {
+            Swal.fire(
+              "Sem pressa!",
+              "Quando estiver com tempo me avisa 🥰",
+              "info"
+            );
+          }
+        });
+      }
+
+      // 1. Pergunta de Acompanhamento: Preferências (didOpen REMOVIDO)
+      function askPreferences() {
+        Swal.fire({
+          title: "Ótimo! 💞",
+          text: "O que você gostaria de fazer?",
+          icon: "question",
+          input: "select",
+          inputOptions: {
+            casual: "🍕 Barzinho",
+            dinner: "🍽️ Jantar",
+            lunch: "🍔 Almoço",
+            samal: "🏖️ Parque",
+            cafe: "☕ Café",
+          },
+          inputPlaceholder: "Escolha algo",
+          showCancelButton: true,
+          confirmButtonText: "Próximo",
+          cancelButtonText: "Cancelar",
+          background: "#f0f7f4",
+          color: "#1b4332",
+          confirmButtonColor: "#3d8168",
+          cancelButtonColor: "#e63946",
+          customClass: {
+            popup: "swal-custom-popup",
+          },
+        }).then((result) => {
+          if (result.value) {
+            askPlace(result.value);
+          } else if (result.dismiss === Swal.DismissReason.cancel) {
+            Swal.fire(
+              "Entendido!",
+              "Vamos conversar sobre isso outra hora! hehe",
+              "info"
+            );
+          } else {
+            askPreferences();
+          }
+        });
+      }
+
+      // 2. Pergunta: Lugar Preferido (didOpen REMOVIDO)
+      function askPlace(dateType) {
+        const dateTypes = {
+          casual: "um bom barzinho",
+          dinner: "um jantar tranquilo",
+          lunch: "um almoço especial",
+          samal: "um passeio no parque",
+          cafe: "um café aconchegante",
+        };
+        Swal.fire({
+          title: "Ótima escolha!✨",
+          text: `Onde você gostaria de ${dateTypes[dateType]}?`,
+          input: "text",
+          inputPlaceholder: "Ex: Um café na praça, aquele restaurante...",
+          showCancelButton: true,
+          confirmButtonText: "Próximo",
+          cancelButtonText: "Cancelar",
+          background: "#f0f7f4",
+          color: "#1b4332",
+          confirmButtonColor: "#3d8168",
+          cancelButtonColor: "#e63946",
+          customClass: {
+            popup: "swal-custom-popup",
+          },
+        }).then((result) => {
+          if (result.value) {
+            askDate(result.value, dateType);
+          } else if (result.dismiss === Swal.DismissReason.cancel) {
+            Swal.fire("Tranquilo!", "Depois conversamos sobre isso", "info");
+          } else {
+            askPlace(dateType);
+          }
+        });
+      }
+
+      // 3. Pergunta: Data Exata (didOpen REMOVIDO)
+      function askDate(place, dateType) {
+        Swal.fire({
+          title: "Escolha a data! 📅",
+          text: "Quando você gostaria de se encontrar?",
+          icon: "question",
+          input: "date",
+          showCancelButton: true,
+          confirmButtonText: "Próximo",
+          cancelButtonText: "Cancelar",
+          background: "#f0f7f4",
+          color: "#1b4332",
+          confirmButtonColor: "#3d8168",
+          cancelButtonColor: "#e63946",
+          customClass: {
+            popup: "swal-custom-popup",
+          },
+        }).then((result) => {
+          if (result.value) {
+            askTime(place, result.value, dateType);
+          } else if (result.dismiss === Swal.DismissReason.cancel) {
+            Swal.fire("Sem pressa!", "Depois pensamos na data!", "info");
+          } else {
+            askDate(place, dateType);
+          }
+        });
+      }
+
+      // 4. Pergunta: Hora Preferida (didOpen REMOVIDO)
+      function askTime(place, date, dateType) {
+        Swal.fire({
+          title: "Sobre o horário! ⏰",
+          text: `A que horas devemos nos encontrar em ${place}?`,
+          icon: "question",
+          input: "select",
+          showCancelButton: true,
+          confirmButtonText: "Próximo",
+          cancelButtonText: "Cancelar",
+          background: "#f0f7f4",
+          color: "#1b4332",
+          inputOptions: {
+            morning: "🌅 Manhã",
+            afternoon_inbetween: "🌞 De tarde (a combinar)",
+            afternoon_after: "🌞 Bem de tardezinha",
+            evening: "🌙 Noite",
+          },
+          inputPlaceholder: "Selecione a hora",
+          confirmButtonColor: "#3d8168",
+          cancelButtonColor: "#e63946",
+          customClass: {
+            popup: "swal-custom-popup",
+          },
+        }).then((result) => {
+          if (result.value) {
+            showSummary(place, result.value, date, dateType);
+          } else if (result.dismiss === Swal.DismissReason.cancel) {
+            Swal.fire("Entendido!", "Vamos finalizar mais tarde!", "info");
+          } else {
+            askTime(place, date, dateType);
+          }
+        });
+      }
+
+      // 5. Função: Exibe o Resumo Final
+      function showSummary(place, time, date, dateType) {
+        const timeTypes = {
+          morning: "pela manhã",
+          afternoon_inbetween: "de tarde (a combinar)",
+          afternoon_after: "bem de tardezinha",
+          evening: "à noite",
+        };
+
+        Swal.fire({
+          title: "YAAAAY É UM ENCONTRO! 🎉",
+          html: `Mal posso esperar para te ver no dia <b>${date}</b> em <b>${place}</b>, ${timeTypes[time]}! Eu te busco, linda! 💕`,
+          icon: "success",
+          confirmButtonText: "Mal posso esperar! 💘",
+          background: "#f0f7f4",
+          color: "#1b4332",
+          confirmButtonColor: "#3d8168",
+        });
+      }
+
+      // LÓGICA DE VERIFICAÇÃO DE NOME (EDUARDA)
+      const enterButton = document.getElementById("enterButton");
+      const nameInput = document.getElementById("nameInput");
+      const errorMessage = document.getElementById("errorMessage");
+
+      enterButton.addEventListener("click", () => {
+        const name = nameInput.value.trim();
+        const validNames = /^(Eduarda)$/i;
+
+        if (validNames.test(name)) {
+          startValentinesInvite();
+          errorMessage.style.display = "none";
+        } else {
+          errorMessage.style.display = "block";
+        }
+      });
+    </script>
+  </body>
+</html>
